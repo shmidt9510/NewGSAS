@@ -81,8 +81,7 @@ def FileCheck(cf,ReFilee):
     return checking
 
 
-def Adding(mass1,mass2):
-    np.searchsorted(mass1,mass2)
+
 #Theta = []
 #for i in range(len(HKL)):
 #    Theta.append(np.arcsin(wavelength/(2*dspace[i])))
