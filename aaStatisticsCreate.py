@@ -6,13 +6,14 @@ import GSASIIElem
 import numpy as np
 import matplotlib.pyplot as plt
 
-def StatisticCreate(ReFilee,wavel,IntCond):
-    wavelength = wavel
-
-    ReFilee='1000009'  # Номер считываемого файла
-    ReDFile=ReFilee+'.cif'
-    cf = CifFile.ReadCif(ReDFile)
+def StatisticCreate(ReFilee,cf,IntCond):
+    #wavelength = wavel
+    #ReFilee='1000009'  # Номер считываемого файла
+    #ReDFile=ReFilee+'.cif'
+    #cf = CifFile.ReadCif(ReDFile)
     wav = cf[ReFilee]['_symmetry_space_group_name_H-M'] #
+    if wav == 'NONO':
+        wav = cf[ReFilee]['_symmetry_space_group_name_H-M_alt']
     a = int(float(cf[ReFilee]['_cell_length_a']))
     b = int(float(cf[ReFilee]['_cell_length_b']))
     c = int(float(cf[ReFilee]['_cell_length_c']))
@@ -62,12 +63,26 @@ def StatisticCreate(ReFilee,wavel,IntCond):
         DspaceIntensity[i, 0]=dspace[i]
         if OverIntNew[i]>IntCond:
             DspaceIntensity[i, 1] = OverIntNew[i]
-            else
+        else:
             DspaceIntensity[i, 1] = 0
-    #(DspaceIntensity)
     # Интенсивность и d-space
     return DspaceIntensity
 
+def FileCheck(cf,ReFilee):
+    wav = cf[ReFilee]['_symmetry_space_group_name_H-M']
+    Element = (cf[ReFilee]['_atom_site_label'])
+    Xpos = cf[ReFilee]['_atom_site_fract_x']
+    Ypos = cf[ReFilee]['_atom_site_fract_y']
+    Zpos = cf[ReFilee]['_atom_site_fract_z']
+    check = 'NONO'
+    #checking = bool()
+    if not ((check == wav) or (check == Xpos) or (check == Ypos) or (check == Zpos) or (check == Element)):
+        checking = True
+    return checking
+
+
+def Adding(mass1,mass2):
+    np.searchsorted(mass1,mass2)
 #Theta = []
 #for i in range(len(HKL)):
 #    Theta.append(np.arcsin(wavelength/(2*dspace[i])))
