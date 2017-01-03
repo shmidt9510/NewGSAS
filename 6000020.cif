@@ -1,0 +1,47 @@
+#------------------------------------------------------------------------------
+#$Date: 2016-02-09 21:42:54 +0300 (Вт, 09 фев 2016) $
+#$Revision: 176292 $
+#$URL: svn://www.crystallography.net/cod/cif/6/00/00/6000020.cif $
+#------------------------------------------------------------------------------
+#
+# This file is available in the Crystallography Open Database (COD),
+# http://www.crystallography.net/
+#
+# All data on this site have been placed in the public domain by the
+# contributors.
+#
+data_6000020
+loop_
+_publ_author_name
+'Gingl, F.'
+'Yvon, K.'
+'Vogt, T.'
+'Hewat, A.'
+_publ_section_title
+;
+ Synthesis and crystal structure of tetragonal LnMg~2~H~7~ (Ln=La, Ce), two
+ laves phase hydride derivatives having ordered hydrogen distribution
+;
+_journal_issue                   54
+_journal_name_full               'Journal of Alloys and Compounds'
+_journal_page_first              313
+_journal_page_last               317
+_journal_paper_doi               10.1016/S0925-8388(96)02992-1
+_journal_volume                  253
+_journal_year                    1997
+_chemical_formula_sum            'Ce D7 Mg2'
+_space_group_name_H-M_alt        'P 4 2 2'
+_cell_angle_alpha                90.000
+_cell_angle_beta                 90.000
+_cell_angle_gamma                90.000
+_cell_length_a                   6.3501
+_cell_length_b                   6.3501
+_cell_length_c                   9.4957
+_cell_volume                     382.90
+_cod_database_code               6000020
+loop_
+_atom_site_label
+_atom_site_fract_x
+_atom_site_fract_y
+_atom_site_fract_z
+? ? ? ?
