@@ -81,7 +81,7 @@ class CifBlock(CifLoopBlock):
                # send the dictionary the required key and a pointer to us
                rawitem = self.dictionary.derive_item(key,self)
            else:
-               raise KeyError, 'No such item: %s' % key
+               rawitem = 'NONO'
         # we now have an item, we can try to convert it to a number if that is appropriate
         if not self.dictionary or not self.dictionary.has_key(key): return rawitem
         return self.dictionary.change_type(key,rawitem)

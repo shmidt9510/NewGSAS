@@ -74,7 +74,7 @@ def StatisticCreate(ReFilee,cf,IntCond):
     for i in range(len(HKL)):
         DspaceIntensity[i, 0]=dspace[i]
         if OverIntNew[i]>IntCond:
-            DspaceIntensity[i, 1] = OverIntNew[i]
+            DspaceIntensity[i, 1] = (OverIntNew[i])**2
         else:
             DspaceIntensity[i, 1] = 0
     # Интенсивность и d-space
@@ -86,11 +86,20 @@ def FileCheck(ReFilee,cf):
     if wav == check:
         wav = cf[ReFilee]['_symmetry_space_group_name_H-M_alt']
     Element = (cf[ReFilee]['_atom_site_label'])
+    che = True
+    for i in range(len(Element)):
+        Elem = Element[i]
+        while (len(Elem)) > 2:
+            Elem = Elem[0:-1]
+        if not(GSASIIElem.CheckElement(Elem)):
+            Elem = Elem[0:-1]
+            if not(GSASIIElem.CheckElement(Elem)):
+                che = False
     Xpos = cf[ReFilee]['_atom_site_fract_x']
     Ypos = cf[ReFilee]['_atom_site_fract_y']
     Zpos = cf[ReFilee]['_atom_site_fract_z']
-    #checking = bool()
-    if not ((check == wav) or (check == Xpos) or (check == Ypos) or (check == Zpos) or (check == Element)):
+    checking = False
+    if (not ((check == wav) or (check == Xpos) or (check == Ypos) or (check == Zpos) or (check == Element))) and che:
         checking = True
     return checking
 

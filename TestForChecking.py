@@ -31,21 +31,26 @@ arr = np.linspace(1,12,num=1000)
 #    Staticd[ind] = Staticd[ind] + ar32[i][1]
 #print(Staticd)
 Staticd = np.zeros(1000)
+for k in range(len(Staticd)):
+    Staticd[k] = k
 arr = np.linspace(1,35,num=1000)
 path = 'f:\\DBcif\\cif\\' + '1' + '\\'+'00' + '\\' + '00' + '\\' + '1000001'
 ReDFile = 'file:\\' + path + '.cif'
 DataNum = '1000001'
 print(DataNum)
-if os.path.exists(path + '.cif'):
-    cf = CifFile.ReadCif(ReDFile)
-    if aastatcr.FileCheck(DataNum, cf):
-        Massiv2 = aastatcr.StatisticCreate(DataNum, cf, 0.1)
-        print(Massiv2)
-        for i in range(len(Massiv2)):
-            ind = np.searchsorted(arr, Massiv2[i][0])
-            print(ind)
-            Staticd[ind-1] = Staticd[ind-1] + Massiv2[i][1]
-
+#if os.path.exists(path + '.cif'):
+#    cf = CifFile.ReadCif(ReDFile)
+#    if aastatcr.FileCheck(DataNum, cf):
+#        Massiv2 = aastatcr.StatisticCreate(DataNum, cf, 0.1)
+#        print(Massiv2)
+#        for i in range(len(Massiv2)):
+#            ind = np.searchsorted(arr, Massiv2[i][0])
+#            print(ind)
+#            Staticd[ind-1] = Staticd[ind-1] + Massiv2[i][1]
+#print(Staticd)
+f = open('text.txt', 'w')
+for i in range(len(Staticd)):
+    f.write(str(Staticd[i])+'\n')
 #Theta = []
 #for i in range(len(ar32)):
 #    Theta.append(np.arcsin(1.5/(2*ar32[i][0])))
