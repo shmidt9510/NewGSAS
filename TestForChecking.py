@@ -16,8 +16,8 @@ import aastatcr
 #Xpos = cf[ReFilee]['_atom_site_fract_x']
 #Ypos = cf[ReFilee]['_atom_site_fract_y']
 #Zpos = cf[ReFilee]['_atom_site_fract_z']
-Staticd = np.zeros(1000)
-arr = np.linspace(1,12,num=1000)
+#Staticd = np.zeros(1000)
+#arr = np.linspace(1,12,num=1000)
 #np.searchsorted(, MassFromStat[0])
 #print(arr)
 #ReFilee = '1000009'  # Номер считываемого файла
@@ -30,9 +30,9 @@ arr = np.linspace(1,12,num=1000)
 #    ind = np.searchsorted(arr,ar32[i][0])
 #    Staticd[ind] = Staticd[ind] + ar32[i][1]
 #print(Staticd)
-Staticd = np.zeros(1000)
-for k in range(len(Staticd)):
-    Staticd[k] = k
+#Staticd = np.zeros(1000)
+#for k in range(len(Staticd)):
+#    Staticd[k] = k
 arr = np.linspace(1,35,num=1000)
 path = 'f:\\DBcif\\cif\\' + '1' + '\\'+'00' + '\\' + '00' + '\\' + '1000001'
 ReDFile = 'file:\\' + path + '.cif'

@@ -47,11 +47,10 @@ for st1 in stest:
                             ind = np.searchsorted(arr, Massiv2[i][0])
                             #print(ind)
                             Staticd[ind-1] = Staticd[ind-1] + Massiv2[i][1]
+            f = open('Static.txt', 'w')
+            for i in range(len(Staticd)):
+                f.write(str(Staticd[i]) + '\n')
     #print(st2)
-print(Staticd)
-f = open('Static.txt', 'w')
-for i in range(len(Staticd)):
-    f.write(str(Staticd[i])+'\n')
 #ReFilee = '1000009'  # Номер считываемого файла
 #ReDFile = ReFilee + '.cif'
 #cf = CifFile.ReadCif(ReDFile)
