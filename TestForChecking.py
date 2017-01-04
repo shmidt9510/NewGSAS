@@ -47,7 +47,7 @@ print(DataNum)
 #            ind = np.searchsorted(arr, Massiv2[i][0])
 #            print(ind)
 #            Staticd[ind-1] = Staticd[ind-1] + Massiv2[i][1]
-#print(Staticd)
+print(Staticd)
 f = open('text.txt', 'w')
 for i in range(len(Staticd)):
     f.write(str(Staticd[i])+'\n')

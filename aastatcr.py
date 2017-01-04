@@ -74,11 +74,18 @@ def StatisticCreate(ReFilee,cf,IntCond):
     for i in range(len(HKL)):
         DspaceIntensity[i, 0]=dspace[i]
         if OverIntNew[i]>IntCond:
-            DspaceIntensity[i, 1] = (OverIntNew[i])**2
+            DspaceIntensity[i, 1] = (OverIntNew[i])
         else:
             DspaceIntensity[i, 1] = 0
     # Интенсивность и d-space
     return DspaceIntensity
+
+def is_number(str):
+    try:
+        float(str)
+        return True
+    except ValueError:
+        return False
 
 def FileCheck(ReFilee,cf):
     check = 'NONO'
@@ -98,8 +105,14 @@ def FileCheck(ReFilee,cf):
     Xpos = cf[ReFilee]['_atom_site_fract_x']
     Ypos = cf[ReFilee]['_atom_site_fract_y']
     Zpos = cf[ReFilee]['_atom_site_fract_z']
+    newcond = True
+    for i in range(len(Xpos)):
+        Xpos[i] = ((re.sub(r'\([^\)]+\)', '', Xpos[i])))
+        Ypos[i] = ((re.sub(r'\([^\)]+\)', '', Ypos[i])))
+        Zpos[i] = ((re.sub(r'\([^\)]+\)', '', Zpos[i])))
+        newcond = newcond and is_number(Xpos[i]) and is_number(Ypos[i]) and is_number(Zpos[i])
     checking = False
-    if (not ((check == wav) or (check == Xpos) or (check == Ypos) or (check == Zpos) or (check == Element))) and che:
+    if (not ((check == wav) or (check == Xpos) or (check == Ypos) or (check == Zpos) or (check == Element))) and che and newcond:
         checking = True
     return checking
 

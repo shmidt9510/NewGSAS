@@ -25,7 +25,7 @@ Staticd = np.zeros(1000)
 arr = np.linspace(0.5,35,num=1000)
 for st1 in stest:
     for st2 in stest1:
-        for st3 in stest1:
+        for st3 in s2:
             for st4 in s2:
                 path = 'f:\\DBcif\\cif\\'+st1+'\\'+st2+'\\'+st3+'\\'+st1+st2+st3+st4
                 ReDFile ='file:\\'+ path + '.cif'
