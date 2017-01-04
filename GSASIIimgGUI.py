@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #GSASII - image data display routines
 ########### SVN repository information ###################
-# $Date: 2016-12-28 00:00:54 +0300 (Ср, 28 дек 2016) $
-# $Author: vondreele $
-# $Revision: 2604 $
+# $Date: 2016-12-22 02:34:47 +0300 (Чт, 22 дек 2016) $
+# $Author: toby $
+# $Revision: 2599 $
 # $URL: https://subversion.xray.aps.anl.gov/pyGSAS/trunk/GSASIIimgGUI.py $
-# $Id: GSASIIimgGUI.py 2604 2016-12-27 21:00:54Z vondreele $
+# $Id: GSASIIimgGUI.py 2599 2016-12-21 23:34:47Z toby $
 ########### SVN repository information ###################
 '''
 *GSASIIimgGUI: Image GUI*
@@ -26,7 +26,7 @@ import wx.lib.mixins.listctrl  as  listmix
 import matplotlib as mpl
 import numpy as np
 import GSASIIpath
-GSASIIpath.SetVersionNumber("$Revision: 2604 $")
+GSASIIpath.SetVersionNumber("$Revision: 2599 $")
 import GSASIIimage as G2img
 import GSASIImath as G2mth
 import GSASIIplot as G2plt
@@ -468,38 +468,6 @@ def UpdateImageControls(G2frame,data,masks,IntegrateOnly=False):
         ResetThresholds()
         G2plt.PlotExposedImage(G2frame,event=event)
         wx.CallLater(100,UpdateImageControls,G2frame,data,masks)
-        
-    def OnTransferAngles(event):
-        '''Sets the integration range for the selected Images based on the difference in detector distance
-        '''
-        Names = G2gd.GetPatternTreeDataNames(G2frame,['IMG ',])
-        if len(Names) == 1:
-            G2frame.ErrorDialog('Nothing images to transfer integration angles to','Need more "IMG"s')
-            return
-        Source = G2frame.PatternTree.GetItemText(G2frame.Image)
-        Names.pop(Names.index(Source))
-# select targets & do copy
-        dlg = G2G.G2MultiChoiceDialog(G2frame,'Xfer angles','Transfer integration range from '+Source+' to:',Names)
-        try:
-            if dlg.ShowModal() == wx.ID_OK:
-                xferAng = lambda tth,dist1,dist2: asind(dist1 * sind(tth) / dist2)
-                items = dlg.GetSelections()
-                G2frame.EnablePlot = False
-                Id = G2gd.GetPatternTreeItemId(G2frame,G2frame.root,Source)
-                data = G2frame.PatternTree.GetItemPyData(G2gd.GetPatternTreeItemId(G2frame,Id,'Image Controls'))
-                ttmin0,ttmax0 = data['IOtth']
-                dist0 = data['distance']
-                print 'distance =',dist0,' integration range: ',data['IOtth']
-                for item in items:
-                    name = Names[item]
-                    Id = G2gd.GetPatternTreeItemId(G2frame,G2frame.root,name)
-                    data = G2frame.PatternTree.GetItemPyData(G2gd.GetPatternTreeItemId(G2frame,Id,'Image Controls'))
-                    dist1 = data['distance']
-                    data['IOtth'] = [xferAng(ttmin0,dist0,dist1),xferAng(ttmax0,dist0,dist1)]
-                    print 'distance =',dist1,' integration range: ',data['IOtth']
-        finally:
-            dlg.Destroy()
-            G2frame.PatternTree.SelectItem(G2frame.PickId)        
             
 # Sizers
     Indx = {}                                    
@@ -1131,12 +1099,13 @@ def UpdateImageControls(G2frame,data,masks,IntegrateOnly=False):
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnRecalibAll, id=G2gd.wxID_IMRECALIBALL)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnClearCalib, id=G2gd.wxID_IMCLEARCALIB)
     if data.get('calibrant'):
-        mode = True
+        G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMRECALIBRATE,enable=True)
+        G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMCALIBRATE,enable=True)
+        G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMRECALIBALL,enable=True)
     else:
-        mode = False
-    G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMRECALIBRATE,enable=mode)
-    G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMCALIBRATE,enable=mode)
-    G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMRECALIBALL,enable=mode)
+        G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMRECALIBRATE,enable=False)
+        G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMCALIBRATE,enable=False)
+        G2frame.dataFrame.ImageEdit.Enable(id=G2gd.wxID_IMRECALIBALL,enable=False)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnIntegrate, id=G2gd.wxID_IMINTEGRATE)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnIntegrateAll, id=G2gd.wxID_INTEGRATEALL)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnCopyControls, id=G2gd.wxID_IMCOPYCONTROLS)
@@ -1144,7 +1113,6 @@ def UpdateImageControls(G2frame,data,masks,IntegrateOnly=False):
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnSaveControls, id=G2gd.wxID_IMSAVECONTROLS)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnSaveMultiControls, id=G2gd.wxID_SAVESELECTEDCONTROLS)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnLoadControls, id=G2gd.wxID_IMLOADCONTROLS)
-    G2frame.dataFrame.Bind(wx.EVT_MENU, OnTransferAngles, id=G2gd.wxID_IMXFERCONTROLS)
     def OnDestroy(event):
         G2frame.autoIntFrame = None
     def OnAutoInt(event):
@@ -1195,7 +1163,7 @@ def CleanupMasks(data):
     for key in ['Points','Rings','Arcs','Polygons']:
         data[key] = data.get(key,[])
         l1 = len(data[key])
-        data[key] = [i for i in data[key] if len(i)]
+        data[key] = [i for i in data[key] if i]
         l2 = len(data[key])
         if GSASIIpath.GetConfigValue('debug') and l1 != l2:
             print 'Mask Cleanup:',key,'was',l1,'entries','now',l2
@@ -1307,15 +1275,9 @@ def UpdateMasks(G2frame,data):
         'Do auto search for spot masks'
         Controls = copy.deepcopy(G2frame.PatternTree.GetItemPyData( 
             G2gd.GetPatternTreeItemId(G2frame,G2frame.PatternId,'Image Controls')))
-        Error = G2img.AutoSpotMasks(G2frame.ImageZ,data,Controls)
-        if not Error is None:
-            G2frame.ErrorDialog('Auto spot search error',Error)
-        wx.CallAfter(UpdateMasks,G2frame,data)
-        G2plt.PlotExposedImage(G2frame,event=event)                
+        G2img.AutoSpotMasks(G2frame.ImageZ,data,Controls)
+        event.Skip()
             
-    def ToggleSpotMaskMode(event):
-        G2plt.ToggleMultiSpotMask(G2frame)
-        
     def OnNewSpotMask(event):
         'Start a new spot mask'
         G2frame.MaskKey = 's'
@@ -1510,7 +1472,6 @@ def UpdateMasks(G2frame,data):
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnSaveMask, id=G2gd.wxID_MASKSAVE)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnAutoSpotMask, id=G2gd.wxID_FINDSPOTS)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnNewSpotMask, id=G2gd.wxID_NEWMASKSPOT)
-    G2frame.dataFrame.Bind(wx.EVT_MENU, ToggleSpotMaskMode, id=G2gd.wxID_MULTISPOTMASK)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnNewArcMask, id=G2gd.wxID_NEWMASKARC)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnNewRingMask, id=G2gd.wxID_NEWMASKRING)
     G2frame.dataFrame.Bind(wx.EVT_MENU, OnNewPolyMask, id=G2gd.wxID_NEWMASKPOLY)
@@ -1565,7 +1526,7 @@ def UpdateMasks(G2frame,data):
         max=thresh[0][1],OnLeave=Replot,typeHint=int)
     littleSizer.Add(upperThreshold,0,WACV)
     mainSizer.Add(littleSizer,0,)
-    if len(Spots):
+    if Spots:
         lbl = wx.StaticText(parent=G2frame.dataDisplay,label=' Spot masks')
         lbl.SetBackgroundColour(wx.Colour(200,200,210))
         mainSizer.Add(lbl,0,wx.EXPAND|wx.ALIGN_CENTER,0)
@@ -1574,7 +1535,7 @@ def UpdateMasks(G2frame,data):
         littleSizer.Add(wx.StaticText(parent=G2frame.dataDisplay,label=' diameter, mm'),0,WACV)
         littleSizer.Add((5,0),0)
         for i in range(len(Spots)):
-            if len(Spots[i]):
+            if Spots[i]:
                 x,y,d = Spots[i]
                 spotText = wx.TextCtrl(parent=G2frame.dataDisplay,value=("%.2f,%.2f" % (x,y)),
                     style=wx.TE_READONLY)

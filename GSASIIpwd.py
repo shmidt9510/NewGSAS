@@ -17,7 +17,6 @@ import math
 import time
 import os
 import subprocess as subp
-
 import numpy as np
 import numpy.linalg as nl
 import numpy.ma as ma
@@ -28,7 +27,6 @@ import scipy.stats as st
 import scipy.optimize as so
 
 import GSASIIpath
-GSASIIpath.SetVersionNumber("$Revision: 2600 $")
 import GSASIIlattice as G2lat
 import GSASIIspc as G2spc
 import GSASIIElem as G2elem
@@ -39,7 +37,7 @@ try:
 except ImportError:
     print 'pydiffax is not available for this platform - under develpment'
 
-    
+GSASIIpath.SetVersionNumber("$Revision: 2600 $")
 # trig functions in degrees
 tand = lambda x: math.tan(x*math.pi/180.)
 atand = lambda x: 180.*math.atan(x)/math.pi

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #config.py - Variables used to set optional configuration options
 ########### SVN repository information ###################
-# $Date: 2016-12-26 23:24:57 +0300 (Пн, 26 дек 2016) $
-# $Author: toby $
-# $Revision: 2603 $
+# $Date: 2016-08-27 16:30:30 +0300 (Сб, 27 авг 2016) $
+# $Author: vondreele $
+# $Revision: 2455 $
 # $URL: https://subversion.xray.aps.anl.gov/pyGSAS/trunk/config_example.py $
-# $Id: config_example.py 2603 2016-12-26 20:24:57Z toby $
+# $Id: config_example.py 2455 2016-08-27 13:30:30Z vondreele $
 ########### SVN repository information ###################
 '''
 *config_example.py: Configuration options*
@@ -104,18 +104,4 @@ home directory can be specified with a '~'.
 wxInspector = False
 '''If set to True, the wxInspector widget is displayed when
 GSAS-II is started.
-'''
-
-Spot_mask_diameter = 1.0
-'''Specifies the default diameter for creation of spot masks. Default is 1.0 mm
-'''
-
-Ring_mask_thickness = 0.1
-'''Specifies the default thickness for creation of ring and arc masks.
-Default is 0.1 degrees 2-theta.
-'''
-
-Arc_mask_azimuth = 10.0
-'''Specifies the default azimuthal range for creation of arc masks.
-Default is 10.0 degrees 2-theta.
 '''

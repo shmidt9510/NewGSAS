@@ -86,7 +86,7 @@ class CifBlock(CifLoopBlock):
         if not self.dictionary or not self.dictionary.has_key(key): return rawitem
         return self.dictionary.change_type(key,rawitem)
 
-    def __setitem__(self,key,value):
+    def __setitem__(selfb,key,value):
         if key == "saves":
             self.saves[key] = value
         else:

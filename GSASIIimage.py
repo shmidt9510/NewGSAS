@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 #GSASII image calculations: ellipse fitting & image integration        
 ########### SVN repository information ###################
-# $Date: 2016-12-28 00:00:54 +0300 (Ср, 28 дек 2016) $
+# $Date: 2016-12-07 20:53:18 +0300 (Ср, 07 дек 2016) $
 # $Author: vondreele $
-# $Revision: 2604 $
+# $Revision: 2563 $
 # $URL: https://subversion.xray.aps.anl.gov/pyGSAS/trunk/GSASIIimage.py $
-# $Id: GSASIIimage.py 2604 2016-12-27 21:00:54Z vondreele $
+# $Id: GSASIIimage.py 2563 2016-12-07 17:53:18Z vondreele $
 ########### SVN repository information ###################
 '''
 *GSASIIimage: Image calc module*
@@ -24,7 +24,7 @@ import polymask as pm
 from scipy.optimize import leastsq
 import copy
 import GSASIIpath
-GSASIIpath.SetVersionNumber("$Revision: 2604 $")
+GSASIIpath.SetVersionNumber("$Revision: 2563 $")
 import GSASIIplot as G2plt
 import GSASIIlattice as G2lat
 import GSASIIpwd as G2pwd
@@ -1125,35 +1125,15 @@ def AutoSpotMasks(Image,Masks,Controls):
     rollImage = lambda rho,roll: np.roll(np.roll(rho,roll[0],axis=0),roll[1],axis=1)
     print 'auto spot search'
     pixelSize = Controls['pixelSize']
-    spotMask = ma.array(Image,mask=(Image<np.mean(Image)))
+    spotMask = ma.array(Image,mask=(Image<3.*np.mean(Image)))
     indices = (-1,0,1)
     rolls = np.array([[ix,iy] for ix in indices for iy in indices])
     for roll in rolls:
         if np.any(roll):        #avoid [0,0]
             spotMask = ma.array(spotMask,mask=(spotMask-rollImage(Image,roll)<=0.))
-    mags = spotMask[spotMask.nonzero()]
     indx = np.transpose(spotMask.nonzero())
-    nx,ny = Image.shape
-    jndx = []
-    for [ind,mag] in zip(indx,mags):
-        if (0 < ind[0] < nx-1) and (0 < ind[1] < ny-1):
-            cent = np.zeros((3,3))
-            cent[1,1] = mag
-            msk = np.array(Image[ind[0]-1:ind[0]+2,ind[1]-1:ind[1]+2])
-            msk = msk-cent
-            if mag > 1.5*np.mean(msk):
-                jndx.append([ind[1]+.5,ind[0]+.5])
-    if len(jndx) > 100:
-        txt = 'Found: %d. Too many spots found; are rings spotty?'%(len(jndx))
-        return txt
-    jndx = np.array(jndx)
-    peaks = jndx*pixelSize/1000.
-    tth = GetTth(peaks.T[0],peaks.T[1],Controls)
-    histo = np.histogram(tth,2500)
-    Points = np.ones((peaks.shape[0],3))
-    Points[:,:2] = peaks
-    Masks['Points'] = Points
-    return None
+    peaks = indx*pixelSize/1000.
+    mags = spotMask[spotMask.nonzero()]
                     
     
         

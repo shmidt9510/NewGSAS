@@ -70,7 +70,6 @@ except ImportError:
     
 # load the GSAS routines
 import GSASIIpath
-GSASIIpath.SetVersionNumber("$Revision: 2596 $")
 import GSASIIIO as G2IO
 import GSASIIElem as G2elem
 import GSASIIgrid as G2gd
@@ -88,7 +87,7 @@ import GSASIIlattice as G2lat
 import GSASIIlog as log
 WACV = wx.ALIGN_CENTER_VERTICAL
 #                GSASIIpath.IPyBreak()
-
+GSASIIpath.SetVersionNumber("$Revision: 2596 $")
 __version__ = '0.2.0'
 
 # PATCH: for Mavericks (OS X 10.9.x), wx produces an annoying warning about LucidaGrandeUI.

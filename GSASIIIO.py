@@ -30,7 +30,6 @@ import sys
 import re
 import random as ran
 import GSASIIpath
-GSASIIpath.SetVersionNumber("$Revision: 2563 $")
 import GSASIIgrid as G2gd
 import GSASIIspc as G2spc
 import GSASIIobj as G2obj
@@ -44,7 +43,7 @@ import GSASIImapvars as G2mv
 import GSASIIctrls as G2G
 import os
 import os.path as ospath
-
+GSASIIpath.SetVersionNumber("$Revision: 2563 $")
 DEBUG = False       #=True for various prints
 TRANSP = False      #=true to transpose images for testing
 if GSASIIpath.GetConfigValue('Transpose'): TRANSP = True

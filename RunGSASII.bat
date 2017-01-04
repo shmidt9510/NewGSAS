@@ -1,4 +1,4 @@
-@REM created by run of bootstrap.py on 31 Dec 2016 14:47
+@REM created by run of bootstrap.py on 25 Dec 2016 16:17
 @echo ========================================================================
 @echo                General Structure Analysis System-II
 @echo              by Robert B. Von Dreele and Brian H. Toby
@@ -14,7 +14,7 @@
 @echo                   Proc. Roy. Soc. Lond. 433A, 499-520 (1991)
 @echo ========================================================================
 @
-F:\Gg2conda\python.exe F:\Gg2conda\GSASII\GSASII.py "%~1"
+D:\g2Cond\g2conda\python.exe D:\g2Cond\g2conda\GSASII\GSASII.py "%~1"
 @REM To keep the window from disappearing with any error messages
 pause
 

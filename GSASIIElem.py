@@ -85,7 +85,6 @@ def GetBLtable(General):
     :return: BLtable, dictionary of scattering length data; key is atom type
     '''
     atomTypes = General['AtomTypes']
-
     BLtable = {}
     isotope = General['Isotope']
     for El in atomTypes:

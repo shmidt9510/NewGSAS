@@ -22,7 +22,6 @@ import time
 import math
 import copy
 import GSASIIpath
-GSASIIpath.SetVersionNumber("$Revision: 2571 $")
 import GSASIIElem as G2el
 import GSASIIlattice as G2lat
 import GSASIIspc as G2spc
@@ -30,7 +29,7 @@ import GSASIIpwd as G2pwd
 import numpy.fft as fft
 import scipy.optimize as so
 import pypowder as pwd
-
+GSASIIpath.SetVersionNumber("$Revision: 2571 $")
 sind = lambda x: np.sin(x*np.pi/180.)
 cosd = lambda x: np.cos(x*np.pi/180.)
 tand = lambda x: np.tan(x*np.pi/180.)
