@@ -12,8 +12,8 @@ def StatisticCreate(ReFilee,cf,IntCond):
     #ReDFile=ReFilee+'.cif'
     #cf = CifFile.ReadCif(ReDFile)
     wav = cf[ReFilee]['_symmetry_space_group_name_H-M'] #
-    #if wav == 'NONO':
-    #    wav = cf[ReFilee]['_symmetry_space_group_name_H-M_alt']
+    if wav == 'NONO':
+        wav = cf[ReFilee]['_symmetry_space_group_name_H-M_alt']
     a = int(float(cf[ReFilee]['_cell_length_a']))
     b = int(float(cf[ReFilee]['_cell_length_b']))
     c = int(float(cf[ReFilee]['_cell_length_c']))
@@ -68,7 +68,7 @@ def StatisticCreate(ReFilee,cf,IntCond):
     # Интенсивность и d-space
     return DspaceIntensity
 
-def FileCheck(cf,ReFilee):
+def FileCheck(ReFilee,cf):
     check = 'NONO'
     wav = cf[ReFilee]['_symmetry_space_group_name_H-M']
     if wav == check:
