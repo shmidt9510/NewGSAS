@@ -4,6 +4,7 @@ import GSASIIlattice
 import GSASIIspc
 import GSASIIElem
 import numpy as np
+import re
 #import matplotlib.pyplot as plt
 
 def StatisticCreate(ReFilee,cf,IntCond):
@@ -14,12 +15,18 @@ def StatisticCreate(ReFilee,cf,IntCond):
     wav = cf[ReFilee]['_symmetry_space_group_name_H-M'] #
     if wav == 'NONO':
         wav = cf[ReFilee]['_symmetry_space_group_name_H-M_alt']
-    a = int(float(cf[ReFilee]['_cell_length_a']))
-    b = int(float(cf[ReFilee]['_cell_length_b']))
-    c = int(float(cf[ReFilee]['_cell_length_c']))
-    alpha = int(float(cf[ReFilee]['_cell_angle_alpha']))
-    beta = int(float(cf[ReFilee]['_cell_angle_beta']))
-    gamma = int(float(cf[ReFilee]['_cell_angle_gamma']))
+    a = cf[ReFilee]['_cell_length_a']
+    a = (float(re.sub(r'\([^\)]+\)', '', a)))
+    b = cf[ReFilee]['_cell_length_b']
+    b = (float(re.sub(r'\([^\)]+\)', '', b)))
+    c = cf[ReFilee]['_cell_length_c']
+    c = (float(re.sub(r'\([^\)]+\)', '', c)))
+    alpha = cf[ReFilee]['_cell_angle_alpha']
+    alpha = (float(re.sub(r'\([^\)]+\)', '', alpha)))
+    beta = cf[ReFilee]['_cell_angle_beta']
+    beta = (float(re.sub(r'\([^\)]+\)', '', beta)))
+    gamma = cf[ReFilee]['_cell_angle_gamma']
+    gamma = (float(re.sub(r'\([^\)]+\)', '', gamma)))
     cell = (a, b, c, alpha, beta, gamma)
     Amat= GSASIIlattice.cell2A(cell)
     err,SGData=GSASIIspc.SpcGroup(wav)
@@ -33,22 +40,27 @@ def StatisticCreate(ReFilee,cf,IntCond):
     Xpos = cf[ReFilee]['_atom_site_fract_x']
     Ypos = cf[ReFilee]['_atom_site_fract_y']
     Zpos = cf[ReFilee]['_atom_site_fract_z']
+    #print(Xpos)
+    for i in range(len(Element)):
+        Xpos[i] = float((re.sub(r'\([^\)]+\)', '', Xpos[i])))
+        Ypos[i] = float((re.sub(r'\([^\)]+\)', '', Ypos[i])))
+        Zpos[i] = float((re.sub(r'\([^\)]+\)', '', Zpos[i])))
     #Intens = np.zeros(len(HKL))
     Intens = []
     OverInt = []
 
     for k in range(len(HKL)):
         Intensity = 0
-        Intens = 0
         for i in range(len(Element)):
-            Elem = []
-            Elem = Element[i][0]
-            if Element[i][1].islower():
-                Elem = Elem + Element[i][1]
+            Elem = Element[i]
+            while (len(Elem)) > 2:
+                Elem = Elem[0:-1]
+            if not(GSASIIElem.CheckElement(Elem)):
+                Elem = Elem[0:-1]
             SSQ = 1/(2*float(dspace[k]))**2
             Elet = GSASIIElem.GetFormFactorCoeff(Elem)
             FRe = GSASIIElem.ScatFac(Elet[0],SSQ)
-            Int = ((FRe*np.exp(2*np.pi*1j*(float(Xpos[i])*HKL[k][0]+float(Ypos[i])*HKL[k][1]+float(Zpos[i])*HKL[k][2]))))
+            Int = ((FRe*np.exp(2*np.pi*1j*((Xpos[i])*HKL[k][0]+(Ypos[i])*HKL[k][1]+(Zpos[i])*HKL[k][2]))))
             Intensity = Intensity + Int
         Intens = (abs(Intensity)) ** 2
         OverInt.append(Intens[0])
