@@ -30,7 +30,7 @@ import aastatcr
 #    ind = np.searchsorted(arr,ar32[i][0])
 #    Staticd[ind] = Staticd[ind] + ar32[i][1]
 #print(Staticd)
-#Staticd = np.zeros(1000)
+Staticd = np.zeros(1000)
 #for k in range(len(Staticd)):
 #    Staticd[k] = k
 arr = np.linspace(1,35,num=1000)
@@ -48,7 +48,7 @@ print(DataNum)
 #            print(ind)
 #            Staticd[ind-1] = Staticd[ind-1] + Massiv2[i][1]
 print(Staticd)
-f = open('text.txt', 'w')
+f = open('Static.txt', 'w')
 for i in range(len(Staticd)):
     f.write(str(Staticd[i])+'\n')
 #Theta = []
