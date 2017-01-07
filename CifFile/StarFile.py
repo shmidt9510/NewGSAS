@@ -1041,10 +1041,10 @@ def ReadStar(filename,maxlength=2048,dest=StarFile(),scantype='standard',grammar
             parser = Y.StarParser(Y.yappsrt.Scanner(None,[],text,scantype='flex'))
         proto_star = getattr(parser,"input")()
     except Y.yappsrt.SyntaxError:
-        #errorstring = 'Syntax error in input file: last value parsed was %s' % Y.lastval
-        #errorstring = errorstring + '\nParser status: %s' % `parser._scanner`
-        #raise StarError( errorstring)
+        errorstring = 'Syntax error in input file: last value parsed was %s' % Y.lastval
+        errorstring = errorstring + '\nParser status: %s' % `parser._scanner`
         raise KeyError
+        # StarError( errorstring)
     # duplication check on all blocks
     audit_result = map(lambda a:(a,proto_star[a].audit()),proto_star.keys())
     audit_result = filter(lambda a:len(a[1])>0,audit_result)

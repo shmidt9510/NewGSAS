@@ -1067,6 +1067,7 @@ def GenHLaue(dmin,SGData,A):
                         if 0 < rdsq <= dminsq:
                             HKL.append([h,k,l,1/math.sqrt(rdsq)])
     elif SGLaue == '2/m':                #monoclinic
+        #print(SGData)
         axisnum = 1 + ['a','b','c'].index(SGUniq)
         Hmax = SwapIndx(axisnum,Hmax)
         for h in range(Hmax[0]+1):

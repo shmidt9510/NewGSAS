@@ -7,7 +7,7 @@ import numpy as np
 import re
 #import matplotlib.pyplot as plt
 
-def StatisticCreate(ReFilee,cf,IntCond):
+def StatisticCreate(ReFilee,cf):
     #wavelength = wavel
     #ReFilee='1000009'  # Номер считываемого файла
     #ReDFile=ReFilee+'.cif'
@@ -72,11 +72,8 @@ def StatisticCreate(ReFilee,cf,IntCond):
 
     DspaceIntensity = np.zeros((len(HKL),2))
     for i in range(len(HKL)):
-        DspaceIntensity[i, 0]=dspace[i]
-        if OverIntNew[i]>IntCond:
-            DspaceIntensity[i, 1] = (OverIntNew[i])
-        else:
-            DspaceIntensity[i, 1] = 0
+        DspaceIntensity[i, 0] = dspace[i]
+        DspaceIntensity[i, 1] = (OverIntNew[i])
     # Интенсивность и d-space
     return DspaceIntensity
 
