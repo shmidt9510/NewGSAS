@@ -2,6 +2,7 @@
 import CifFile
 import GSASIIlattice
 import GSASIIspc
+import os.path
 import GSASIIElem
 import numpy as np
 import re
@@ -113,8 +114,32 @@ def FileCheck(ReFilee,cf):
         checking = True
     return checking
 
-
-
+def GetSomeDSpace(st):
+    global Massiv
+    #global truenum
+    #global falsenum
+    chel = [0, 0]
+    try:
+        path = 'f:\\DBcif\\cif\\' + st[0] + '\\' + st[1]+st[2] + '\\' + st[3]+st[4] + '\\' + st
+        ReDFile = 'file:\\' + path + '.cif'
+        DataNum = st
+        if os.path.exists(path + '.cif'):
+            cf = CifFile.ReadCif(ReDFile)
+            volu = (cf[DataNum]['_cell_volume'])
+            year = (cf[DataNum]['_journal_year'])
+            ChemForm = (cf[DataNum]['_chemical_formula_sum'])
+            inform = year + ChemForm
+            if volu == 'NONO':
+                volu = float(10)
+            else:
+                volu = (float(re.sub(r'\([^\)]+\)', '', volu)))
+            print(DataNum)
+            if FileCheck(DataNum, cf) and (volu < 2500):
+                Massiv = StatisticCreate(DataNum, cf)
+                chel = [Massiv, inform]
+    except Exception:
+        print('I FOUND ERROR ON ',st)
+    return chel
 #Theta = []
 #for i in range(len(HKL)):
 #    Theta.append(np.arcsin(wavelength/(2*dspace[i])))
