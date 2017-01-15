@@ -6,6 +6,7 @@ import os.path
 import GSASIIElem
 import numpy as np
 import re
+import atmdata
 #import matplotlib.pyplot as plt
 
 def StatisticCreate(ReFilee,cf):
@@ -31,7 +32,10 @@ def StatisticCreate(ReFilee,cf):
     cell = (a, b, c, alpha, beta, gamma)
     Amat= GSASIIlattice.cell2A(cell)
     err,SGData=GSASIIspc.SpcGroup(wav)
-    HKL = GSASIIlattice.GenHLaue(1.2, SGData, Amat)
+    HKL = GSASIIlattice.GenHLaue(1, SGData, Amat)
+    #print(HKL)
+    HKL = HKL[:151:]
+    #print(HKL)
     #Получили матрицу с hkl и d
     dspace = []
     for i in range(len(HKL)):
@@ -59,12 +63,20 @@ def StatisticCreate(ReFilee,cf):
             if not(GSASIIElem.CheckElement(Elem)):
                 Elem = Elem[0:-1]
             SSQ = 1/(2*float(dspace[k]))**2
-            Elet = GSASIIElem.GetFormFactorCoeff(Elem)
-            FRe = GSASIIElem.ScatFac(Elet[0],SSQ)
-            Int = ((FRe*np.exp(2*np.pi*1j*((Xpos[i])*HKL[k][0]+(Ypos[i])*HKL[k][1]+(Zpos[i])*HKL[k][2]))))
+            #XRAY
+            #Elet = GSASIIElem.GetFormFactorCoeff(Elem)
+            #FRe = GSASIIElem.ScatFac(Elet[0],SSQ)
+            #Int = ((FRe*np.exp(2*np.pi*1j*((Xpos[i])*HKL[k][0]+(Ypos[i])*HKL[k][1]+(Zpos[i])*HKL[k][2]))))
+            #Neutron
+            #Elet = GSASIIElem.GetAtomInfo(Elem,False)
+            #print(Elet)
+            FRe = atmdata.AtmBlens[Elem+'_']['SL'][0]
+            #print(FRe)
+            Int = ((FRe * np.exp(2 * SSQ * np.pi * 1j * ((Xpos[i]) * HKL[k][0] + (Ypos[i]) * HKL[k][1] + (Zpos[i]) * HKL[k][2]))))
             Intensity = Intensity + Int
         Intens = (abs(Intensity)) ** 2
-        OverInt.append(Intens[0])
+        #print(Intens)
+        OverInt.append(Intens)
     #print(OverInt)
     #OverInt это интенсивность
 
@@ -125,16 +137,16 @@ def GetSomeDSpace(st):
         DataNum = st
         if os.path.exists(path + '.cif'):
             cf = CifFile.ReadCif(ReDFile)
-            volu = (cf[DataNum]['_cell_volume'])
+            #volu = (cf[DataNum]['_cell_volume'])
             year = (cf[DataNum]['_journal_year'])
             ChemForm = (cf[DataNum]['_chemical_formula_sum'])
             inform = year + ChemForm
-            if volu == 'NONO':
-                volu = float(10)
-            else:
-                volu = (float(re.sub(r'\([^\)]+\)', '', volu)))
+            #if volu == 'NONO':
+            #    volu = float(10)
+            #else:
+            #    volu = (float(re.sub(r'\([^\)]+\)', '', volu))) and (volu < 2500):
             print(DataNum)
-            if FileCheck(DataNum, cf) and (volu < 2500):
+            if FileCheck(DataNum, cf):
                 Massiv = StatisticCreate(DataNum, cf)
                 chel = [Massiv, inform]
     except Exception:
