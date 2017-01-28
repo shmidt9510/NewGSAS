@@ -19,15 +19,16 @@ for i in range(11,99,1):
 #print(s2)
 #print(os.path.exists('f:\\DBcif\\cif\\4\\08\\06\\4080617.cif'))
 #print('f:\\DBcif\\cif\\4\\08\\06\\4080617.cif')
-#cf = CifFile.ReadCif('file:\\f:\\DBcif\\cif\\4\\08\\06\\4080617.cif')1517795
+#cf = CifFile.ReadCif('file:\\f:\\DBcif\\cif\\4\\08\\06\\4080617.cif')1517795 2107372 1529639
 #print(cf)
 sq1 = ['1']
-sq2 = ['51']
-sq3 = ['77']
-sq4 = ['95']
+sq2 = ['00']
+sq3 = ['00']
+sq4 = ['41']
 falsenum = 0
 truenum = 0
 Staticd = np.zeros((1000,9))
+#Massiv2 = 1
 arr = np.linspace(0.5,35,num=1000)
 for st1 in sq1:
     for st2 in sq2:
@@ -77,11 +78,14 @@ for st1 in sq1:
                                 #truenum = truenum + 1
                 except Exception:
                     falsenum = falsenum + 1
-                    print (Massiv2)
-                    print(Staticd)
+                    #print (Massiv2)
+                    #print(Staticd)
                 print('T',truenum)
                 print('F',falsenum)
-print(Massiv2)
+f = open('Massiv2test.txt', 'w')
+for i in range(len(Massiv2)):
+    f.write(str(Massiv2[i,0])+' '+str(Massiv2[i,1])+' '+str(Massiv2[i,2])+' '+str(Massiv2[i,3])+' '+str(Massiv2[i,4])+' ' + str(Massiv2[i,5])+'\n')
+
     #print(st2)
 #ReFilee = '1000009'  # Номер считываемого файла
 #ReDFile = ReFilee + '.cif'
