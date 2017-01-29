@@ -19,12 +19,12 @@ for i in range(11,99,1):
 #print(s2)
 #print(os.path.exists('f:\\DBcif\\cif\\4\\08\\06\\4080617.cif'))
 #print('f:\\DBcif\\cif\\4\\08\\06\\4080617.cif')
-#cf = CifFile.ReadCif('file:\\f:\\DBcif\\cif\\4\\08\\06\\4080617.cif')1517795
+#cf = CifFile.ReadCif('file:\\f:\\DBcif\\cif\\4\\08\\06\\4080617.cif')1517795 1529639
 #print(cf)
 sq1 = ['1']
-sq2 = ['51']
-sq3 = ['77']
-sq4 = ['95']
+sq2 = ['52']
+sq3 = ['96']
+sq4 = ['39']
 falsenum = 0
 truenum = 0
 Staticd = np.zeros((1000,9))
@@ -35,10 +35,10 @@ for st1 in sq1:
             for st4 in sq4:
                 try:
                 #for iop in range(1):
-                    path = 'f:\\DBcif\\cif\\'+st1+'\\'+st2+'\\'+st3+'\\'+st1+st2+st3+st4
+                    path = 'd:\\DB1\\cif\\'+st1+'\\'+st2+'\\'+st3+'\\'+st1+st2+st3+st4
                     ReDFile ='file:\\'+ path + '.cif'
                     #print(ReDFile)
-                    #print(os.path.exists(path+'.cif'))
+                    print(os.path.exists(path+'.cif'))
                     DataNum = st1+st2+st3+st4
                     if os.path.exists(path+'.cif'):
                         cf = CifFile.ReadCif(ReDFile)
@@ -59,9 +59,9 @@ for st1 in sq1:
                         #else:
                         #    volu = (float(re.sub(r'\([^\)]+\)', '', volu)))
                         print(DataNum)
-                        #print(StCr.FileCheck(DataNum,cf))
+                        print(StCr.FileCheck(DataNum,cf))
                         if StCr.FileCheck(DataNum,cf):
-                            Massiv2 = StCr.StatisticCreate(DataNum,cf)
+                            Staticd = StCr.StatisticCreate(DataNum,cf)
                             #print(Massiv2)
                             #for IntCond in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
                                 #for i in range(len(Massiv2)):
@@ -74,15 +74,16 @@ for st1 in sq1:
                                 #f = open('Static'+stre+'.txt', 'w')
                                 #for i in range(len(Staticd)):
                                     #f.write(str(Staticd[i,int(IntCond*10-1)]) + '\n')
-                                #truenum = truenum + 1
+                            truenum = truenum + 1
                 except Exception:
                     falsenum = falsenum + 1
-                    print (Massiv2)
-                    print(Staticd)
+                    #print(Massiv2)
+
                 print('T',truenum)
                 print('F',falsenum)
-print(Massiv2)
+#print(Massiv2)
     #print(st2)
+print(Staticd)
 #ReFilee = '1000009'  # Номер считываемого файла
 #ReDFile = ReFilee + '.cif'
 #cf = CifFile.ReadCif(ReDFile)

@@ -71,8 +71,8 @@ def StatisticCreate(ReFilee,cf):
             #Elet = GSASIIElem.GetAtomInfo(Elem,False)
             #print(Elet)
             FRe = atmdata.AtmBlens[Elem+'_']['SL'][0]
-            #print(FRe)
-            Int = ((FRe * np.exp(2 * SSQ * np.pi * 1j * ((Xpos[i]) * HKL[k][0] + (Ypos[i]) * HKL[k][1] + (Zpos[i]) * HKL[k][2]))))
+            #print(FRe) * SSQ
+            Int = ((FRe * np.exp(2  * np.pi * 1j * ((Xpos[i]) * HKL[k][0] + (Ypos[i]) * HKL[k][1] + (Zpos[i]) * HKL[k][2]))))
             Intensity = Intensity + Int
         Intens = (abs(Intensity)) ** 2
         #print(Intens)
@@ -140,10 +140,13 @@ def GetSomeDSpace(st):
             #volu = (cf[DataNum]['_cell_volume'])
             year = (cf[DataNum]['_journal_year'])
             ChemForm = (cf[DataNum]['_chemical_formula_sum'])
+            organickcheck = False
+            #if ChemForm[0]='C' and int(ChemForm[1]+ChemForm[2])>8:
+            #    organickcheck = True
             inform = year + ChemForm
             #if volu == 'NONO':
             #    volu = float(10)
-            #else:
+            #else:  and organickcheck == False
             #    volu = (float(re.sub(r'\([^\)]+\)', '', volu))) and (volu < 2500):
             print(DataNum)
             if FileCheck(DataNum, cf):
