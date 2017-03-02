@@ -41,14 +41,15 @@ arr = np.linspace(0.5,35,num=1000)
 
 
 if __name__ == '__main__':
-    p = Pool(processes = 8)
+    p = Pool(processes = 4)
     onenum=0
     twonum=0
     # true range 8301 7153000
     for l in range(0,8301,1):
         g = data_gen(1000001+l*1000,1000000+(l+1)*1000)
         results = p.map(StCr.GetSomeDSpace,g)
-        #print(1000000+l*1000)#len(results)
+        print(1000000+l*1000)
+        #len(results)
         for tt in range(len(results)):
             Massiv = results[tt][0]
             infq = results[tt][1]
@@ -63,23 +64,23 @@ if __name__ == '__main__':
                 twonum = twonum + 1 #and not (ChemForm == ChemFormLast)
                 #ChemFormLast = ChemForm
                 for i in range(len(Massiv)):
-                    ind = np.searchsorted(arr, Massiv[i][0])
+                    ind = np.searchsorted(arr, Massiv[i])
                     StaticdO[ind - 1] = StaticdO[ind - 1] + 1
                 f = open('Static00.txt', 'w')
-                #for i in range(len(StaticdO)):
-                #    f.write(str(StaticdO[i]) + '\n')
-                #f.close()
-                for IntCond in [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
-                    for i in range(len(Massiv)):
-                        ind = np.searchsorted(arr, Massiv[i][0])
-                        if Massiv[i][1] > float(IntCond):
-                            Staticd[ind - 1, int(IntCond * 10 - 1)] = Staticd[ind - 1, int(IntCond * 10 - 1)] + Massiv[i][1]
-                            Staticd1[ind - 1, int(IntCond * 10 - 1)] = Staticd1[ind - 1, int(IntCond * 10 - 1)]+1
-                    stre = str(IntCond * 10)
-                    f = open('Static' + stre + '.txt', 'w')
-                    g = open('Static1' + stre + '.txt', 'w')
-                    for i in range(len(Staticd)):
-                        f.write(str(Staticd[i, int(IntCond * 10 - 1)]) + '\n')
-                        g.write(str(Staticd1[i, int(IntCond * 10 - 1)]) + '\n')
-                    f.close()
-                    g.close()
+                for i in range(len(StaticdO)):
+                    f.write(str(StaticdO[i]) + '\n')
+                f.close()
+                #for IntCond in [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]:
+                #    for i in range(len(Massiv)):
+                #        ind = np.searchsorted(arr, Massiv[i][0])
+                 #       if Massiv[i][1] > float(IntCond):
+                 #           Staticd[ind - 1, int(IntCond * 10 - 1)] = Staticd[ind - 1, int(IntCond * 10 - 1)] + Massiv[i][1]
+                 #           Staticd1[ind - 1, int(IntCond * 10 - 1)] = Staticd1[ind - 1, int(IntCond * 10 - 1)]+1
+                 #   stre = str(IntCond * 10)
+                 #   f = open('Static' + stre + '.txt', 'w')
+                 #   g = open('Static1' + stre + '.txt', 'w')
+                 #   for i in range(len(Staticd)):
+                  #      f.write(str(Staticd[i, int(IntCond * 10 - 1)]) + '\n')
+                  #      g.write(str(Staticd1[i, int(IntCond * 10 - 1)]) + '\n')
+                 #   f.close()
+                 #   g.close()

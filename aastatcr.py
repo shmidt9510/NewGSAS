@@ -44,15 +44,15 @@ def StatisticCreate(ReFilee,cf):
     Zpos = cf[ReFilee]['_atom_site_fract_z']
     MultFact = cf[ReFilee]['_atom_site_symmetry_multiplicity']
     if MultFact == 'NONO':
-        MultFact = np.ones(len(Elements))
+        MultFact = np.ones(len(Element))
     # print(Xpos)
     for i in range(len(Element)):
         Xpos[i] = float((re.sub(r'\([^\)]+\)', '', Xpos[i])))
         Ypos[i] = float((re.sub(r'\([^\)]+\)', '', Ypos[i])))
         Zpos[i] = float((re.sub(r'\([^\)]+\)', '', Zpos[i])))
-    # Intens = np.zeros(len(HKL))
+    Intens = np.zeros(len(HKL))
     Positions = equivpositions(EquivPos,Xpos,Ypos,Zpos)
-    print(Positions)
+    #print(Positions)
     Intens = []
     OverInt = []
     ForModInt = np.zeros(len(HKL))
@@ -110,9 +110,6 @@ def StatisticCreate(ReFilee,cf):
         DspaceIntensity[i, 5] = ForModInt[i]
     # Интенсивность и d-space
     return DspaceIntensity
-#def butisitorganic(Elem):
-#    if Elem[0] == 'C' and Elem[1].isdigit:
-
 
 
 def is_number(str):
@@ -157,7 +154,7 @@ def GetSomeDSpace(st):
     #global falsenum
     chel = [0, 0]
     try:
-        path = 'f:\\DBcif\\cif\\' + st[0] + '\\' + st[1]+st[2] + '\\' + st[3]+st[4] + '\\' + st
+        path = 'd:\\DB1\\cif\\' + st[0] + '\\' + st[1]+st[2] + '\\' + st[3]+st[4] + '\\' + st
         ReDFile = 'file:\\' + path + '.cif'
         DataNum = st
         if os.path.exists(path + '.cif'):
@@ -171,8 +168,9 @@ def GetSomeDSpace(st):
             #else:
             #    volu = (float(re.sub(r'\([^\)]+\)', '', volu))) and (volu < 2500):
             print(DataNum)
-            if FileCheck(DataNum, cf):
-                Massiv = StatisticCreate(DataNum, cf)
+            if FileCheck(DataNum, cf) & isitorganic(ChemForm) == False:
+                #Massiv = StatisticCreate(DataNum, cf)
+                Massiv = DSpaceCreateOnly(DataNum,cf)
                 chel = [Massiv, inform]
     except Exception:
         print('I FOUND ERROR ON ',st)
@@ -184,11 +182,19 @@ def GetSomeDSpace(st):
 #plt.plot(Theta, OverIntNew)
 #plt.show()
 
+
+def isitorganic(ChemForm):
+    if ChemForm[0] == 'C' and (int(ChemForm[1])*10+int(ChemForm[2]))>8:
+        return True
+    else:
+        return False
+
 def equivpositions(equiv,Xpos,Ypos,Zpos):
     a = []
     b = []
     c = []
     equivpos = []
+    posnum = 0
     for i in range(len(equiv)):
         equiv[i] = equiv[i].replace('1/2','0.5')
         l1 = equiv[i].find(',')
@@ -202,10 +208,46 @@ def equivpositions(equiv,Xpos,Ypos,Zpos):
             y = float(Ypos[k])
             z = float(Zpos[k])
             equivp.append([round(eval(a[i]),5),round(eval(b[i]),5),round(eval(c[i]),5)])
-        equivpos.append(equivp)
+        equivpos.append(equivp)  # do if made new position - end.
     for i in range(len(Xpos)):
         for k in range(len(equiv)-1):
             for l in range(k+1,len(equiv)):
-                if equivpos[l][i] == equivpos[k][i]:
+                if equivpos[l][i] == equivpos[k][i] or (equivpos[k][i][0]==1 or equivpos[k][i][1]==1 or equivpos[k][i][2]==1):
                     equivpos[l][i]=[10,10,10]
+    for i in range(len(Xpos)):
+        for k in range(len(equiv)-1):
+            if equivpos[l][i] <> equivpos[k][i]:
+                posnum = posnum +1
+    print(posnum)
+    print(len(equiv))
     return equivpos
+
+
+def DSpaceCreateOnly(ReFilee,cf):
+    # ReFilee='1000009'  # Номер считываемого файла
+    #EquivPos = cf[ReFilee]['_symmetry_equiv_pos_as_xyz']
+    wav = cf[ReFilee]['_symmetry_space_group_name_H-M']
+    if wav == 'NONO':
+        wav = cf[ReFilee]['_symmetry_space_group_name_H-M_alt']
+    a = cf[ReFilee]['_cell_length_a']
+    a = (float(re.sub(r'\([^\)]+\)', '', a)))
+    b = cf[ReFilee]['_cell_length_b']
+    b = (float(re.sub(r'\([^\)]+\)', '', b)))
+    c = cf[ReFilee]['_cell_length_c']
+    c = (float(re.sub(r'\([^\)]+\)', '', c)))
+    alpha = cf[ReFilee]['_cell_angle_alpha']
+    alpha = (float(re.sub(r'\([^\)]+\)', '', alpha)))
+    beta = cf[ReFilee]['_cell_angle_beta']
+    beta = (float(re.sub(r'\([^\)]+\)', '', beta)))
+    gamma = cf[ReFilee]['_cell_angle_gamma']
+    gamma = (float(re.sub(r'\([^\)]+\)', '', gamma)))
+    cell = (a, b, c, alpha, beta, gamma)
+    Amat= GSASIIlattice.cell2A(cell)
+    err,SGData=GSASIIspc.SpcGroup(wav)
+    HKL = GSASIIlattice.GenHLaue(0.8, SGData, Amat)
+    dspace = []
+    for i in range(len(HKL)):
+        dspace.append(HKL[i][3])
+        # HKL = HKL[:151:]
+    dspace = dspace[:200:]
+    return dspace
